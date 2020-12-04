@@ -52,6 +52,7 @@ Here is a list of the most important parts of this project that you may need to 
 1. **`Project/CMakeLists.txt`** - is the most interesting part of this progect. It is located in the Project directory. Here you can set up your project name, compiler flags for debug and release, paths to all your sources and headers directories (both main and third-party), and fine tune all the firmwareassemble process.
 2. **`/third-party/src/peripheral_libs`** - is the folder wit all the ST peripheral libraries, CMSIS files and the **custom made CMake file** to build it as a single static library. You can use any peripheral sources that you need here. Removal of the CMake file is not recomended, as well as folder renaming.
 3. **`/third-party/src/custom_environment.template`** - is a template with environment variables. You can set up all the common flags or defines for third-party building process here.
+4. **`/third-party/src/environment`** - is a file with environment variables, almost the same as previous one. It can be used for CI pipelines.
 4. **`Project/application`** - put all your app sources and headers here. You can use any folder hierarchy inside this directory.
 5. **`Project/main_firmware`** - put here your main.cpp, Startup and System files for the main firmware.
 6. **`Project/test_firmware`** - put here your main.cpp, Startup and System files for the test firmware, as well as your unit tests sources and headers. You can use any folder hierarchy inside this directory.
@@ -62,6 +63,10 @@ Here is a list of the most important parts of this project that you may need to 
 **NOTE 6:** "main_firmware" and "test_firmware" folders (both) should contain the same Startup and System files. **The same System file** (if we are talking about STM32) should be placed to /third-party/src/peripheral_libs filder.
 >>>
 
+>>>
+**NOTE 7:** Each of the "environment" and "custom_environment" files contain `MCFLAGS` - compiler flags for building third-party sources. These flags are **microcontroller specific** and should be updated in the context of the microcontroller you use.
+>>>
+
 
 # Build process
 
@@ -70,7 +75,7 @@ Here is a list of the most important parts of this project that you may need to 
 1. gcc-arm-none-eabi (GNU Arm Embedded Toolchain) - can be downloaded from [ARM Developer web site](https://developer.arm.com/tools-and-software/open-source-software/developer-tools/gnu-toolchain/gnu-rm/downloads). It can be installed on your system or downloaded to any location of your choise.
 
 >>>
-**NOTE 7:** these packages are required to be installed/downloaded on your pc. Without them you can not build stm_firmware package.
+**NOTE 8:** these packages are required to be installed/downloaded on your pc. Without them you can not build stm_firmware package.
 >>>
 
 ## Build procedure
@@ -84,7 +89,7 @@ git submodule update --init --recursive
 git submodule update --init --recursive --remote
 ```
 4. Go to /third-party/src and make a copy of ***"custom_environment.template"*** file with ***"custom_environment"*** name (without ".template" postfix)
-5. Inside this new file modify `GCC_CUSTOM` variable to your compiler route
+5. Inside this new file modify `GCC_CUSTOM` variable to your compiler route and `MCFLAGS` with the compiler flags needed for your specific microcontroller (if needed).
 6. Go one directory up and run `build_third_party.sh` script
 7. Create /BUILD directory near /Project directory
 8. Import CMakeLists.txt file from /Project directory into your IDE. This should create a new project.
@@ -116,7 +121,7 @@ git submodule update --init --recursive --remote
 Below is a partial directory structure for this project to understand the general location of the files.
 
 >>>
-**`NOTE 8:`**  BUILD directory should be created by user!
+**`NOTE 9:`**  BUILD directory should be created by user!
 >>>
 
 ```bash
@@ -136,7 +141,8 @@ Below is a partial directory structure for this project to understand the genera
 │   │   ├── peripheral_libs (user defined lib sources & CMakeLists.txt)
 │   │   ├── build_gtest.sh
 │   │   ├── build_peripheral.sh
-│   │   └── custom_environment.template
+│   │   ├── custom_environment.template
+│   │   └── environment
 │   └── build_third_party.sh
 ├── LICENSE
 ├── README.md

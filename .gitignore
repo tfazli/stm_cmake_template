@@ -53,3 +53,6 @@ hg/
 *.DS_Store
 .DS_Store
 .DS_Store?
+
+# Custom Environment
+custom_environment
