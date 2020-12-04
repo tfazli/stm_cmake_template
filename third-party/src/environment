@@ -1,0 +1,38 @@
+PROJECT_ROOT=`pwd`/../..
+PREFIX=${PROJECT_ROOT}/third-party/out
+DESTDIR=${PROJECT_ROOT}/third-party/out/lib
+HEADERDIR=${PROJECT_ROOT}/third-party/out/include
+BINDIR=${PROJECT_ROOT}/third-party/out/bin
+SHAREDIR=${PROJECT_ROOT}/third-party/out/share
+PLATFORM='unknown'
+QMAKESPEC=''
+unamestr=`uname`
+machinestr=`uname -m`
+PROCS_COUNT=$(nproc --all)
+MAKEOPTS=" -j 8"
+
+export CC=arm-none-eabi-gcc
+export CXX=arm-none-eabi-g++
+export LD=arm-none-eabi-ld
+export AR=arm-none-eabi-ar
+AS=arm-none-eabi-as
+CP=arm-none-eabi-objcopy
+OD=arm-none-eabi-objdump
+NM=arm-none-eabi-nm
+SIZE=arm-none-eabi-size
+A2L=arm-none-eabi-addr2line
+GCOV=arm-none-eabi-gcov
+GPROF=arm-none-eabi-gprof
+
+export MCFLAGS="-mcpu=cortex-m4 -mthumb -mlittle-endian -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb-interwork"
+
+export COMMON_DEFS="-DCMAKE_TRY_COMPILE_TARGET_TYPE=STATIC_LIBRARY -DCMAKE_INSTALL_PREFIX=${PREFIX}"
+
+export GTEST_DEFS="-DGTEST_HAS_POSIX_RE=0 -DGTEST_HAS_PTHREAD=0 -DGTEST_HAS_DEATH_TEST=0 -DGTEST_HAS_STREAM_REDIRECTION=0 -DGTEST_OS_NONE"
+
+if [ -f custom_environment ];
+then
+source custom_environment
+fi
+
+set -e

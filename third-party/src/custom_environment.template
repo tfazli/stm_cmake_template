@@ -1,0 +1,22 @@
+# This file is a template one. Do not modify it, make a copy instead (with "custom_environment" name).
+
+GCC_CUSTOM=~/wrk/reps/gcc-arm-none-eabi-9-2019-q4-major
+export CC=$GCC_CUSTOM/bin/arm-none-eabi-gcc
+export CXX=$GCC_CUSTOM/bin/arm-none-eabi-g++
+export LD=$GCC_CUSTOM/bin/arm-none-eabi-ld
+export AR=$GCC_CUSTOM/bin/arm-none-eabi-ar
+AS=$GCC_CUSTOM/bin/arm-none-eabi-as
+CP=$GCC_CUSTOM/bin/arm-none-eabi-objcopy
+OD=$GCC_CUSTOM/bin/arm-none-eabi-objdump
+NM=$GCC_CUSTOM/bin/arm-none-eabi-nm
+SIZE=$GCC_CUSTOM/bin/arm-none-eabi-size
+A2L=$GCC_CUSTOM/bin/arm-none-eabi-addr2line
+GCOV=$GCC_CUSTOM/bin/arm-none-eabi-gcov
+GPROF=$GCC_CUSTOM/bin/arm-none-eabi-gprof
+
+export MCFLAGS="-mcpu=cortex-m4 -mthumb -mlittle-endian -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb-interwork"
+
+export COMMON_DEFS="-DCMAKE_TRY_COMPILE_TARGET_TYPE=STATIC_LIBRARY -DCMAKE_INSTALL_PREFIX=${PREFIX}"
+
+export GTEST_DEFS="-DGTEST_HAS_POSIX_RE=0 -DGTEST_HAS_PTHREAD=0 -DGTEST_HAS_DEATH_TEST=0 -DGTEST_HAS_STREAM_REDIRECTION=0 -DGTEST_OS_NONE"
+

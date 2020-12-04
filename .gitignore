@@ -5,6 +5,7 @@ Realese/
 hg/
 .metadata/
 .settings/
+third-party/out/
 
 #Eclipse project settings
 .cproject
@@ -53,3 +54,6 @@ hg/
 *.DS_Store
 .DS_Store
 .DS_Store?
+
+# Custom Environment
+custom_environment

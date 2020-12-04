@@ -1,0 +1,5 @@
+[submodule "third-party/src/gtest"]
+	path = third-party/src/gtest
+	url = https://github.com/tfazli/gtest.git
+	branch = master
+	ignore = dirty
