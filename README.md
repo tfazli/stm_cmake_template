@@ -9,11 +9,11 @@ For example, this template was successfully used to create a software (and unit 
 ## Important notice:
 
 >>>
-**`NOTE 1:`**  As an example, this project includes _**the libraries for the STM32F4xx series**_ of microcontrollers. In particular, such libraries are _**CMSIS and SPL**_ for this revision of microcontrollers, as well as a _**third-party USB device library**_. The sections below indicate in which directories these libraries are located so that you can reconfigure or replace them in your applications as needed.
+**`NOTE 1:`**  As an example, this project includes _**the libraries for the STM32F4xx series**_ of microcontrollers added as a submodule repository. In particular, such libraries are _**CMSIS and SPL**_ for this revision of microcontrollers, as well as a _**third-party USB device library**_. The sections below indicate in which directories these libraries are located so that you can reconfigure or replace them in your applications as needed.
 >>>
 
 >>>
-**`NOTE 2:`**  GoogleTest framework is added as a submodule repository linking [to my google test fork](https://github.com/tfazli/googletest), because in this fork _**arm-none-eabi support**_ is implemented. You can always fork this repo in case you need it. A more detailed description of the unit tests support on a microcontroller using this framework, as well as a description of obtaining test results, is described in the sections below.
+**`NOTE 2:`**  GoogleTest framework is added as a submodule repository linking [to my google test fork](https://github.com/tfazli/gtest), because in this fork _**arm-none-eabi support**_ is implemented. You can always fork this repo in case you need it. A more detailed description of the unit tests support on a microcontroller using this framework, as well as a description of obtaining test results, is described in the sections below.
 >>>
 
 >>>
@@ -138,7 +138,7 @@ Below is a partial directory structure for this project to understand the genera
 ├── third-party
 │   ├── src
 │   │   ├── gtest (submodule)
-│   │   ├── peripheral_libs (user defined lib sources & CMakeLists.txt)
+│   │   ├── peripheral_libs (submodule, depends on the user application)
 │   │   ├── build_gtest.sh
 │   │   ├── build_peripheral.sh
 │   │   ├── custom_environment.template
