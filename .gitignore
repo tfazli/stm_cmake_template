@@ -1,0 +1,59 @@
+# Folders
+BUILD/
+Debug/
+Realese/
+hg/
+.metadata/
+.settings/
+third-party/out/
+
+#Eclipse project settings
+.cproject
+.project
+
+# Build results
+*.user
+
+#Eclipse language settings
+*.xml
+
+# Prerequisites
+*.d
+
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Fortran module files
+*.mod
+*.smod
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
+
+# OS X specific
+*.DS_Store
+.DS_Store
+.DS_Store?
+
+# Custom Environment
+custom_environment

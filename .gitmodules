@@ -1,0 +1,10 @@
+[submodule "third-party/src/gtest"]
+	path = third-party/src/gtest
+	url = https://github.com/tfazli/gtest.git
+	branch = master
+	ignore = dirty
+[submodule "third-party/src/peripheral"]
+	path = third-party/src/peripheral
+	url = https://github.com/tfazli/stm32f4_peripheral.git
+	branch = master
+	ignore = dirty
