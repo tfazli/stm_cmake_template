@@ -53,14 +53,14 @@ Here is a list of the most important parts of this project that you may need to 
 2. **`/third-party/src/peripheral_libs`** - is the folder wit all the ST peripheral libraries, CMSIS files and the **custom made CMake file** to build it as a single static library. You can use any peripheral sources that you need here. Removal of the CMake file is not recomended, as well as folder renaming.
 3. **`/third-party/src/custom_environment.template`** - is a template with environment variables. You can set up all the common flags or defines for third-party building process here.
 4. **`/third-party/src/environment`** - is a file with environment variables, almost the same as previous one. It can be used for CI pipelines.
-4. **`Project/application`** - put all your app sources and headers here. You can use any folder hierarchy inside this directory.
+4. **`Project/application`** - put all your app sources and headers here. Do not delete System file. You can use any folder hierarchy inside this directory.
 5. **`Project/main_firmware`** - put here your main.cpp, Startup and System files for the main firmware.
 6. **`Project/test_firmware`** - put here your main.cpp, Startup and System files for the test firmware, as well as your unit tests sources and headers. You can use any folder hierarchy inside this directory.
 7. **`Project/STM32F407.ld`** - here could be any linker file for your firmware.
 8. **`/third-party/src/peripheral_libs/adjust_sys.h`** - this is the file for fine tuning SPL to your desired microcontroller settings (clock, etc.).
 
 >>>
-**NOTE 6:** "main_firmware" and "test_firmware" folders (both) should contain the same Startup and System files. **The same System file** (if we are talking about STM32) should be placed to /third-party/src/peripheral_libs filder.
+**NOTE 6:** "main_firmware" and "test_firmware" folders (both) should contain the same Startup and System files. **The same System file** (if we are talking about STM32) should be placed to `/third-party/src/peripheral_libs` filder and to `Project/application` folder.
 >>>
 
 >>>
@@ -128,11 +128,11 @@ Below is a partial directory structure for this project to understand the genera
 ├── BUILD (user created)
 ├── Project
 │   ├── application
-│   │   └── All user  application sources
+│   │   └── All user  application sources and System file
 │   ├── main_firmware
 │   │   └── Mainfile, Startup and System files for the main firmware
 │   ├── test_firmware
-│   │   └── Mainfile, Startup, System files and sources for the UnitTests firmware
+│   │   └── Mainfile, Startup, System files, ITM rerouter and sources for the UnitTests firmware
 │   ├── STM32F407.ld (any user defined linker file)
 │   └── CMakeLists.txt
 ├── third-party
