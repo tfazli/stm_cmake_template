@@ -20,6 +20,17 @@ For example, this template was successfully used to create a software (and unit 
 **`NOTE 3:`**  In the last section below you can find basic description of this project directory structure.
 >>>
 
+## CMake and compiling in release mode
+
+The CMake file in this project (Project/CMakeLists.txt) sets the settings for building the project in release mode as follows:
+   - Maximum optimization (-O3 flag);
+   - No debugging information (-g0 flag).
+
+As you know, in applications for some embedded systems and microcontrollers, maximum optimization can (in some cases) lead to inoperability of the code. For example, this is possible if the compiler optimizations consider the call to the external interrupt handler to be a function that is never called. Therefore, **`be careful when using optimization flags`** and always take appropriate action if you think the compiler is optimizing your code incorrectly.
+
+>>>
+**`NOTE 4:`**  You can always change the flags of optimization for the release build in the CMake file at your discretion.
+>>>
 
 ## How this template works
 
@@ -33,11 +44,11 @@ This template project is designed in such a way that the build process is done i
 The firmware with unit tests is designed in such a way that it outputs the tests result through the in-circuit debugger to the console on your PC via **ITM (Instrumentation Trace Macrocell)**. You can read more [about ITM here](https://interrupt.memfault.com/blog/profiling-firmware-on-cortex-m). As an in-circuit debugger, you can use, for example, a one that is built-in to STM32F4Discovery board or any similar.
 
 >>>
-**`NOTE 4:`**  The firmware with unit tests may be too large for your target device, therefore it is recommended to generate several separate firmwares (with part of the tests) or to use emulators, such as QEMU.
+**`NOTE 5:`**  The firmware with unit tests may be too large for your target device, therefore it is recommended to generate several separate firmwares (with part of the tests) or to use emulators, such as QEMU.
 >>>
 
 >>>
-**`NOTE 5:`**  If you do not want to use ITM for displaying test results, you can change output interface in the sources to any other convenient for you (UART, etc.), or simply turn on some LED after testing is complete - it's up to you.
+**`NOTE 6:`**  If you do not want to use ITM for displaying test results, you can change output interface in the sources to any other convenient for you (UART, etc.), or simply turn on some LED after testing is complete - it's up to you.
 >>>
 
 
@@ -60,11 +71,11 @@ Here is a list of the most important parts of this project that you may need to 
 8. **`/third-party/src/peripheral_libs/adjust_sys.h`** - this is the file for fine tuning SPL to your desired microcontroller settings (clock, etc.).
 
 >>>
-**NOTE 6:** "main_firmware" and "test_firmware" folders (both) should contain the same Startup and System files. **The same System file** (if we are talking about STM32) should be placed to `/third-party/src/peripheral_libs` filder and to `Project/application` folder.
+**NOTE 7:** "main_firmware" and "test_firmware" folders (both) should contain the same Startup and System files. **The same System file** (if we are talking about STM32) should be placed to `/third-party/src/peripheral_libs` filder and to `Project/application` folder.
 >>>
 
 >>>
-**NOTE 7:** Each of the "environment" and "custom_environment" files contain `MCFLAGS` - compiler flags for building third-party sources. These flags are **microcontroller specific** and should be updated in the context of the microcontroller you use.
+**NOTE 8:** Each of the "environment" and "custom_environment" files contain `MCFLAGS` - compiler flags for building third-party sources. These flags are **microcontroller specific** and should be updated in the context of the microcontroller you use.
 >>>
 
 
@@ -75,7 +86,7 @@ Here is a list of the most important parts of this project that you may need to 
 1. gcc-arm-none-eabi (GNU Arm Embedded Toolchain) - can be downloaded from [ARM Developer web site](https://developer.arm.com/tools-and-software/open-source-software/developer-tools/gnu-toolchain/gnu-rm/downloads). It can be installed on your system or downloaded to any location of your choise.
 
 >>>
-**NOTE 8:** these packages are required to be installed/downloaded on your pc. Without them you can not build stm_firmware package.
+**NOTE 9:** these packages are required to be installed/downloaded on your pc. Without them you can not build stm_firmware package.
 >>>
 
 ## Build procedure
@@ -97,7 +108,7 @@ git submodule update --init --recursive --remote
 10. Add `VERSION` variable equals `x.x.x` (for example) into your build environment variables. If you will run CMake manually at this step, this should change the name of your project into "stm-firmware-x.x.x". Needed only for apropriate testing and debug process
 11. Import or update some of your cmake variables inside project settings:
    - CMAKE_TRY_COMPILE_TARGET_TYPE=**`STATIC_LIBRARY`**
-   - CMAKE_BUILD_TYPE=**`Debug`**
+   - CMAKE_BUILD_TYPE=**`Debug`** (you can set this to **Release** if you need)
    - CMAKE_SYSROOT=**`path to arm-none-eabi-gcc /.content/bin`**
    - CMAKE_INSTALL_RPATH=**`path to arm-none-eabi-gcc /.content/lib folder`**
    - CMAKE_SIZE=**`path to arm-none-eabi-gcc /.content/bin/arm-none-eabi-size`**
@@ -121,7 +132,7 @@ git submodule update --init --recursive --remote
 Below is a partial directory structure for this project to understand the general location of the files.
 
 >>>
-**`NOTE 9:`**  BUILD directory should be created by user!
+**`NOTE 10:`**  BUILD directory should be created by user!
 >>>
 
 ```bash
