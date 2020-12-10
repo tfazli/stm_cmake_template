@@ -1,0 +1,65 @@
+arch: amd64
+os: linux
+dist: bionic
+language: generic
+
+notifications:
+  email:
+    on_success: never
+    on_failure: always
+
+git:
+  submodules: true
+
+stages:
+  - name: "Thirdparty Build"
+  - name: "Firmware Build"
+
+env:
+  global:
+    - TRAVIS_REPO_OWNER=${TRAVIS_REPO_SLUG%/*}
+    - TRAVIS_REPO_NAME=${TRAVIS_REPO_SLUG#*/}
+    - E_HIGHLIGHT="\033[1;35m"
+    - E_NORMAL="\033[0m"
+
+before_script:
+  - export VERSION=$(cat ./VERSION)-${TRAVIS_BUILD_ID}
+  - echo -e "\n${E_HIGHLIGHT}Build version is ${VERSION}${E_NORMAL}\n"
+
+jobs:
+  include:
+    - stage: "Thirdparty Build"
+      name: "Thirdparty on Ubuntu 18.04"
+      env: DEPENDENCIES_CACHE_TRICK=ubuntu-18
+      services:
+        - docker
+      before_install:
+        - docker pull kulebyaka/arm-compiler-ubuntu-18-04
+        - if [[ -d ./third-party/out ]]; then rm -rf ./third-party/out; fi
+      install: skip
+      script:
+        - docker run --name arm-docker-18 --rm -itd -v $(pwd):/${TRAVIS_REPO_NAME} kulebyaka/arm-compiler-ubuntu-18-04 /bin/bash
+        - docker exec -it -w /${TRAVIS_REPO_NAME} arm-docker-18 ./third-party/build_third_party.sh
+        - docker kill arm-docker-18
+      cache:
+        directories:
+          - ./third-party/out
+
+    - stage: "Firmware Build"
+      name: "Firmware on Ubuntu 18.04"
+      env: DEPENDENCIES_CACHE_TRICK=ubuntu-18
+      services:
+        - docker
+      before_install:
+        - docker pull kulebyaka/arm-compiler-ubuntu-18-04
+        - if [[ -d ./BUILD ]]; then rm -rf ./BUILD; fi
+      install: skip
+      script:
+        - docker run --name arm-docker-18 -e "VERSION=${VERSION}" --rm -itd -v $(pwd):/${TRAVIS_REPO_NAME} kulebyaka/arm-compiler-ubuntu-18-04 /bin/bash
+        - docker exec -it -w /${TRAVIS_REPO_NAME} arm-docker-18 ./.travis/build-firmware.sh
+        - docker kill arm-docker-18
+      cache:
+        directories:
+          - ./third-party/out
+          - ./BUILD
+
