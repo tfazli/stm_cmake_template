@@ -1,5 +1,9 @@
 # STM32 CMake Template with GoogleTest support
 
+[![Build Status](https://travis-ci.org/tfazli/stm_cmake_template.svg?branch=master)](https://travis-ci.org/tfazli/stm_cmake_template) [![License: MIT](https://img.shields.io/github/license/tfazli/stm_cmake_template)](https://github.com/tfazli/stm_cmake_template/blob/master/LICENSE)
+
+---
+
 ## Description
 
 This basic template repository can be used as a quick start for any new C++ ARM firmware project (STM32, NXP, etc.). Included CMake and GoogleTest framework support allow you to quickly build, test, and package your software.
