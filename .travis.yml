@@ -1,0 +1,88 @@
+arch: amd64
+os: linux
+dist: bionic
+language: generic
+
+notifications:
+  email:
+    on_success: never
+    on_failure: always
+
+git:
+  submodules: true
+
+stages:
+  - name: "Thirdparty Build"
+  - name: "Firmware Build"
+  - name: "Deploy"
+    if: tag IS present
+
+env:
+  global:
+    - TRAVIS_REPO_OWNER=${TRAVIS_REPO_SLUG%/*}
+    - TRAVIS_REPO_NAME=${TRAVIS_REPO_SLUG#*/}
+    - E_HIGHLIGHT="\033[1;35m"
+    - E_NORMAL="\033[0m"
+
+before_script:
+  - export VERSION=$(cat ./VERSION)-${TRAVIS_BUILD_ID}
+  - echo -e "\n${E_HIGHLIGHT}Build version is ${VERSION}${E_NORMAL}\n"
+
+jobs:
+  include:
+    - stage: "Thirdparty Build"
+      name: "Thirdparty on Ubuntu 18.04"
+      env: DEPENDENCIES_CACHE_TRICK=ubuntu-18
+      services:
+        - docker
+      before_install:
+        - docker pull kulebyaka/arm-compiler-ubuntu-18-04
+        - if [[ -d ./third-party/out ]]; then rm -rf ./third-party/out; fi
+      install: skip
+      script:
+        - docker run --name arm-docker-18 --rm -itd -v $(pwd):/${TRAVIS_REPO_NAME} kulebyaka/arm-compiler-ubuntu-18-04 /bin/bash
+        - docker exec -it -w /${TRAVIS_REPO_NAME} arm-docker-18 ./third-party/build_third_party.sh
+        - docker kill arm-docker-18
+      cache:
+        directories:
+          - ./third-party/out
+
+    - stage: "Firmware Build"
+      name: "Firmware on Ubuntu 18.04"
+      env: DEPENDENCIES_CACHE_TRICK=ubuntu-18
+      services:
+        - docker
+      before_install:
+        - docker pull kulebyaka/arm-compiler-ubuntu-18-04
+        - if [[ -d ./BUILD ]]; then rm -rf ./BUILD; fi
+      install: skip
+      script:
+        - docker run --name arm-docker-18 -e "VERSION=${VERSION}" --rm -itd -v $(pwd):/${TRAVIS_REPO_NAME} kulebyaka/arm-compiler-ubuntu-18-04 /bin/bash
+        - docker exec -it -w /${TRAVIS_REPO_NAME} arm-docker-18 ./.travis/build-firmware.sh
+        - docker kill arm-docker-18
+      cache:
+        directories:
+          - ./third-party/out
+          - ./BUILD
+
+    - stage: "Deploy"
+      name: "Firmware Deploy"
+      env: DEPENDENCIES_CACHE_TRICK=ubuntu-18
+      if: tag IS present
+      cache:
+        directories:
+          - ./BUILD
+      deploy:
+        - provider: releases
+          edge: true # flag to use Travis dpl v2
+          token:
+            secure: BuKZVdLi2MRpBc5/rLFBvrUqy5zJlw0Nm0ZCU2C0SI5iQjCk2aVmjlMNXaU6QBWSjiyQQUVMoDbnGAO8qq+G2Agf5ztetV+qszrUR+ZT0GeZtP4roKlYrydWkmaJ3Fq5HVRPAXTbbIRe7wNC4BFzupzY+qb6X9K+E7OrVYVwAriy6BihC1SP9bOq14gvwu0QcT/+nV3+1n79iSXLNbWO7KpljJGTamnAWo5PyqccteDRZ4Bz8lbqAnMcDScGHCbG5neUBEgVJOS9HvVTWvoFefOw7FEMND9z98UhajP5pBrHBTGKIP5Qcow3KQSxRxBj+EL3jE04dCdVQ7Ewy2bzeIriKrN2GT5Oy6tVsmEIlauE/i56WuHyraRMSa+ixjCMYuyDxA89LncpEzFIzWTa9MCp52vzbBLwpfUqXMeuXrzghdRT6lf6Qf89OA4iDgM7Vsad7vaEnSuam1IcBojxLQ1A9U8ZoY51NVVBrO092bCE17ZPnyCexGGpxGDNyaJJ5obiVwzb1pNQfSOAIeKuQq1+dEJFrFLB/dCHNdII+oDn0EObfoAIgH5yHDXzK9u7RyGa/AW0AuLwAFvHPAszGIuaMt8O5lE59gphn/Gu8TKODcHkyaxB52M/mHe4o1bCh4yyebBD9DKFnV8s4SMtep116/BKQrNQe4kC1lnwWfw=
+          file_glob: true
+          file: ./BUILD/stm-cmake*
+          cleanup: false
+          name: "Release v${VERSION}"
+          release_notes: "${TRAVIS_COMMIT_MESSAGE}. [Link to build log](${TRAVIS_BUILD_WEB_URL})."
+          on:
+            repo: ${TRAVIS_REPO_SLUG}
+            tags: true
+
