@@ -75,8 +75,7 @@ jobs:
       deploy:
         - provider: releases
           edge: true # flag to use Travis dpl v2
-          token:
-            secure: BuKZVdLi2MRpBc5/rLFBvrUqy5zJlw0Nm0ZCU2C0SI5iQjCk2aVmjlMNXaU6QBWSjiyQQUVMoDbnGAO8qq+G2Agf5ztetV+qszrUR+ZT0GeZtP4roKlYrydWkmaJ3Fq5HVRPAXTbbIRe7wNC4BFzupzY+qb6X9K+E7OrVYVwAriy6BihC1SP9bOq14gvwu0QcT/+nV3+1n79iSXLNbWO7KpljJGTamnAWo5PyqccteDRZ4Bz8lbqAnMcDScGHCbG5neUBEgVJOS9HvVTWvoFefOw7FEMND9z98UhajP5pBrHBTGKIP5Qcow3KQSxRxBj+EL3jE04dCdVQ7Ewy2bzeIriKrN2GT5Oy6tVsmEIlauE/i56WuHyraRMSa+ixjCMYuyDxA89LncpEzFIzWTa9MCp52vzbBLwpfUqXMeuXrzghdRT6lf6Qf89OA4iDgM7Vsad7vaEnSuam1IcBojxLQ1A9U8ZoY51NVVBrO092bCE17ZPnyCexGGpxGDNyaJJ5obiVwzb1pNQfSOAIeKuQq1+dEJFrFLB/dCHNdII+oDn0EObfoAIgH5yHDXzK9u7RyGa/AW0AuLwAFvHPAszGIuaMt8O5lE59gphn/Gu8TKODcHkyaxB52M/mHe4o1bCh4yyebBD9DKFnV8s4SMtep116/BKQrNQe4kC1lnwWfw=
+          token: ${GITHUB_TOKEN}
           file_glob: true
           file: ./BUILD/stm-cmake*
           cleanup: false
